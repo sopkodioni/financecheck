@@ -17,11 +17,13 @@ FinanceCheck — MVP-додаток для обліку доходів та ви
 На перших етапах в якості даних планується використання мок-даних (json-server), пізніше Express.js + PostgreSQL.
 
 ## Структура проєкту
+```
 finance-check/
 ├── frontend/        # React-додаток
 ├── backend/         # json-server (мок API)
 ├── assets/          # дизайн, специфікация
 └── README.md
+```
 
 ## Запуск проєкту
 FRONTEND:
