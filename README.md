@@ -26,10 +26,15 @@ finance-check/
 ```
 
 ## Запуск проєкту
+```
 FRONTEND:
-!Буде описано пізніше
+cd frontend
+npm install
+npm run dev
+
 BACKEND:
 !Буде описано пізніше
+```
 
 ## Тенхнології
  - React.js (Frontend)
