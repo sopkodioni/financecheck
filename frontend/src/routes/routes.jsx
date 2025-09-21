@@ -3,22 +3,23 @@ import { Dashboard } from '../pages/Dashboard/Dashboard.jsx'
 import { AppSettings } from '../pages/AppSettings/AppSettings.jsx'
 import { UserProfile } from '../pages/UserProfile/UserProfile.jsx'
 import { createBrowserRouter } from 'react-router'
+import { ROUTES } from './routesPaths.js'
 
 export const router = createBrowserRouter([
   {
-    path: '/',
+    path: ROUTES.MAIN,
     Component: MainPage
   },
   {
-    path: '/dashboard',
+    path: ROUTES.DASHDOARD,
     Component: Dashboard
   },
   {
-    path: '/app-settings',
+    path: ROUTES.SETTINGS,
     Component: AppSettings
   },
   {
-    path: '/profile',
+    path: ROUTES.PROFILE,
     Component: UserProfile
   }
 ])
