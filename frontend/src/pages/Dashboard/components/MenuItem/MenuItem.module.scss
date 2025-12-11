@@ -1,0 +1,46 @@
+@use '../../../../styles/vars.css';
+
+.menuItem{
+    border: 2px solid var(--box-border-color);
+    background-color: var(--main-color);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    aspect-ratio: 1 / 1;
+    transition: 0.2s ease-in-out;
+    padding: 5px;
+
+    svg path{
+        transition: 0.2s ease-in-out;
+    }
+}
+
+.analyticsColor:hover{
+    border-color: var(--state-color-blue);
+
+    & svg path{
+        fill: var(--state-color-blue);
+    }
+}
+
+.transactionsColor:hover{
+    border-color: var(--state-color-red);
+
+    svg path:first-child{
+        stroke: var(--state-color-red);
+    }
+
+    svg path:last-child{
+        stroke: var(--state-color-green);
+    }
+}
+
+.walletColor:hover{
+    border-color: var(--state-color-tan);
+
+    svg path{
+        fill: var(--state-color-tan);
+    }
+}

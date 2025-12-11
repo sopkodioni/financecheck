@@ -1,3 +1,19 @@
 .dashboard{
-    background-color: #8ecfbd;
+    height: 100%;
+    display: flex;
+    padding: 10px;
+    gap: 10px;
+}
+
+.rightContainer{
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.header{
+    display: flex;
+    gap: 10px;
+    height: 72px; // temp
 }

@@ -4,6 +4,9 @@ import { AppSettings } from '../pages/AppSettings/AppSettings.jsx'
 import { UserProfile } from '../pages/UserProfile/UserProfile.jsx'
 import { createBrowserRouter } from 'react-router'
 import { ROUTES } from './routesPaths.js'
+import { Analytics } from '../pages/Dashboard/components/Main/Pages/Analytics.jsx'
+import { Wallets } from '../pages/Dashboard/components/Main/Pages/Wallets.jsx'
+import { Transactions } from '../pages/Dashboard/components/Main/Pages/Transactions.jsx'
 
 export const router = createBrowserRouter([
   {
@@ -12,7 +15,12 @@ export const router = createBrowserRouter([
   },
   {
     path: ROUTES.DASHDOARD,
-    Component: Dashboard
+    Component: Dashboard,
+    children: [
+      {index: true, Component: Analytics},
+      {path: 'incomes', Component: Transactions},
+      {path: 'wallets', Component: Wallets},
+    ]
   },
   {
     path: ROUTES.SETTINGS,
