@@ -15,6 +15,27 @@
     svg path{
         transition: 0.2s ease-in-out;
     }
+
+    // Стили для вложенного меню (ItemSubmenu)
+    ul {
+        position: absolute;
+        top: 100%;            // под кнопкой
+        left: 50%;
+        transform: translateX(-50%) translateY(-10px); // начальное смещение для анимации
+        opacity: 0;
+        pointer-events: none;
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        transition: all 0.3s ease-in-out;
+        z-index: 10;          // чтобы было поверх других элементов
+    }
+
+    &:hover ul {
+        transform: translateX(-50%) translateY(0); // выезжает вниз
+        opacity: 1;
+        pointer-events: auto;
+    }
 }
 
 .analyticsColor:hover{

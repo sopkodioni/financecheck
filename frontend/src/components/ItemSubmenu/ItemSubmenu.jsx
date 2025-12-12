@@ -1,20 +1,19 @@
-import { NavLink } from "react-router"
-import { Icon } from "../Icon"
+import { NavLink } from "react-router";
+import { Icon } from "../Icon";
+import styles from "./MenuItemSubmenu.module.scss";
 
-export const ItemSubmenu = ({items}) => {
-    if(items){
-        return (
-            <ul>
-                { items.map((item) => (
-                    <li>
-                        <NavLink to={item.path}>
-                            <Icon key={item.id} name={item.iconTitle}/>
-                        </NavLink>
-                    </li>
-                )) }
-            </ul>
-        )
-    }
-}
+export const ItemSubmenu = ({ items }) => {
+    if (!items) return null;
 
-// className={styles.submenuList}
+    return (
+        <ul className={styles.itemSubmenu}>
+            {items.map(item => (
+                <li key={item.id}>
+                    <NavLink to={item.path}>
+                        <Icon name={item.iconTitle} />
+                    </NavLink>
+                </li>
+            ))}
+        </ul>
+    );
+};
