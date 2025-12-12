@@ -8,11 +8,16 @@ import { Analytics } from '../pages/Dashboard/components/Main/Pages/Analytics.js
 import { Wallets } from '../pages/Dashboard/components/Main/Pages/Wallets.jsx';
 import { Transactions } from '../pages/Dashboard/components/Main/Pages/Transactions.jsx';
 import { PrivateRoute } from '../components/PrivateRoute';
+import { PublicRoute } from '../components/PublicRoute';
 
 export const router = createBrowserRouter([
   {
     path: ROUTES.MAIN,
-    Component: MainPage
+    Component: () => (
+      <PublicRoute>
+        <MainPage />
+      </PublicRoute>
+    )
   },
   {
     path: ROUTES.DASHDOARD,
