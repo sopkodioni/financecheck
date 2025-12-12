@@ -25,7 +25,7 @@ export const asideItemsList = [
             {
                 id: uuidv4(),
                 title: 'Витрати',
-                path: '/dashboard/expencsive',
+                path: '/dashboard/expencsives',
                 iconTitle: 'transactions', // temp
                 colorClassMod: `transactionsColor`, 
             },

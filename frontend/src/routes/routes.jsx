@@ -7,6 +7,7 @@ import { ROUTES } from './routesPaths.js';
 import { Analytics } from '../pages/Dashboard/components/Main/Pages/Analytics.jsx';
 import { Wallets } from '../pages/Dashboard/components/Main/Pages/Wallets.jsx';
 import { Transactions } from '../pages/Dashboard/components/Main/Pages/Transactions.jsx';
+import { Expensives } from '../pages/Dashboard/components/Main/Pages/Expensives.jsx';
 import { PrivateRoute } from '../components/PrivateRoute';
 import { PublicRoute } from '../components/PublicRoute';
 
@@ -29,6 +30,7 @@ export const router = createBrowserRouter([
     children: [
       { index: true, Component: Analytics },
       { path: 'incomes', Component: Transactions },
+      { path: 'expencsives', Component: Expensives }, 
       { path: 'wallets', Component: Wallets },
     ]
   },
