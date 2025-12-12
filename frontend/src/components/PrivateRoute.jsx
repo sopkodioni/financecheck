@@ -6,7 +6,6 @@ export const PrivateRoute = ({ children }) => {
     const { user, loading } = useContext(AuthContext);
 
     if (loading) {
-        // пока мы проверяем localStorage, не рендерим редирект
         return <div>Loading...</div>;
     }
 
