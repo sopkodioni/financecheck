@@ -1,3 +1,46 @@
-.mainpage{
-    background-color: #c1cf8e;
+.wrapper {
+    width: 100%;
+    height: 100vh;
+    background: #000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.card {
+    width: 380px;
+    padding: 30px;
+    background: #111;
+    border-radius: 16px;
+    box-shadow: 0 0 25px rgba(255, 255, 255, 0.05);
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+
+.switcher {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 25px;
+
+    button {
+        flex: 1;
+        padding: 10px 0;
+        background: transparent;
+        border: none;
+        color: #777;
+        font-size: 16px;
+        cursor: pointer;
+        transition: 0.3s;
+
+        &.active {
+            color: #fff;
+            font-weight: 600;
+            border-bottom: 2px solid #fff;
+        }
+    }
 }
