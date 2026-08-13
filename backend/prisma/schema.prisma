@@ -1,6 +1,6 @@
 generator client {
   provider = "prisma-client"
-  output   = "../src/generated"
+  output   = "../src/prisma/generated"
   moduleFormat = "cjs" 
 }
 
@@ -8,6 +8,91 @@ datasource db {
   provider = "postgresql"
 }
 
-model TestModel {
+model User {
   id String @id @default(uuid())
+  name String 
+  email String @unique
+  login String @unique
+  passHash String 
+  createdAt DateTime @default(now()) @db.Timestamptz() @map("created_at") 
+  updatedAt DateTime @default(now()) @db.Timestamptz() @map("updated_at") 
+
+  wallets Wallet[]
+  currencies Currency[]
+  categories Category[]
+  
+  @@map("users")
+}
+
+model Wallet {
+  id String @id @default(uuid())
+  name String 
+  balance Decimal @db.Decimal(12, 2) 
+  initialBalance Decimal @db.Decimal(12, 2) @map("initial_balance")
+  note String?
+  createdAt DateTime @default(now()) @db.Timestamptz() @map("created_at") 
+  updatedAt DateTime @default(now()) @db.Timestamptz() @map("updated_at")
+
+  userId String @map("user_id") 
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  currencyId String @map("currency_id")
+  currency Currency @relation(fields: [currencyId], references: [id])
+  
+  transactions Transaction[]
+
+  @@map("wallets")
+}
+
+model Currency {
+  id String @id @default(uuid())
+  name String
+  code String
+  symbol String
+
+  wallets Wallet[]
+  
+  userId String? @map("user_id")
+  user User? @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@unique([userId, name])
+  @@unique([userId, code])
+  @@map("currencies")
+}
+
+model Transaction {
+  id String @id @default(uuid())
+  amount Decimal @db.Decimal(12,2)
+  note String? 
+  type TransactionType 
+  date DateTime @default(now()) @db.Timestamptz()
+  createdAt DateTime @default(now()) @db.Timestamptz() @map("created_at") 
+  updatedAt DateTime @default(now()) @db.Timestamptz() @map("updated_at")
+  
+  walletId String @map("wallet_id")
+  wallet Wallet @relation(fields: [walletId], references: [id])
+  categoryId String @map("category_id")
+  category Category @relation(fields: [categoryId], references: [id])
+
+  @@map("transactions")
+}
+
+model Category {
+  id String @id @default(uuid())
+  name String
+  type TransactionType
+  createdAt DateTime @default(now()) @db.Timestamptz() @map("created_at") 
+  updatedAt DateTime @default(now()) @db.Timestamptz() @map("updated_at")
+  
+  userId String
+  user User @relation(fields: [userId], references: [id])
+
+  transactions Transaction[]
+
+  @@map("categories")
+  @@unique([userId, name])
+}
+
+enum TransactionType {
+  INCOME
+  EXPENSE
 }
