@@ -28,7 +28,7 @@ model Wallet {
   id String @id @default(uuid())
   name String 
   balance Decimal @db.Decimal(12, 2) 
-  initialBalance Decimal @db.Decimal(12, 2) @map("initial_balance")
+  initialBalance Decimal @db.Decimal(12, 2) @map("initial_balance") @default(0.00)
   note String?
   createdAt DateTime @default(now()) @db.Timestamptz() @map("created_at") 
   updatedAt DateTime @default(now()) @db.Timestamptz() @map("updated_at")
