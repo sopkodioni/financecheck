@@ -42,7 +42,7 @@
   * GET `/users/me` - отримання даних поточного користувача
 * **DTOs:**
   * CreateUserDto (`name`,`email`, `login`, `password`)
-  * UpdateUserDto (`name`,`email`, `login`, `password` - опціонально)
+  * UpdateUserDto (`name?`,`email?`, `login?`, `password?`)
 * **Service methods:**
   * create(dto)
   * update(id, dto)
