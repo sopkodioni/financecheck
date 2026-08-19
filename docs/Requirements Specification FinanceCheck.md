@@ -41,8 +41,8 @@
   * DELETE `/users/me` - видалення поточного користувача
   * GET `/users/me` - отримання даних поточного користувача
 * **DTOs:**
-  * CreateUserDto (`name`,`email`, `login`, `password`)
-  * UpdateUserDto (`name?`,`email?`, `login?`, `password?`)
+  * create-user (`name`,`email`, `login`, `password`)
+  * update-user (`name?`,`email?`, `login?`, `password?`)
 * **Service methods:**
   * create(dto)
   * update(id, dto)
