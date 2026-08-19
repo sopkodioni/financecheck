@@ -6,7 +6,6 @@ CREATE TABLE "users" (
     "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "email" TEXT NOT NULL,
-    "login" TEXT NOT NULL,
     "passHash" TEXT NOT NULL,
     "created_at" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -17,7 +16,6 @@ CREATE TABLE "users" (
 ALTER TABLE "users"
     ADD CONSTRAINT "user_name_check" CHECK (name ~ '^[a-zA-Zа-яА-ЯёЁіІїЇєЄґҐ\s]{2,40}$'),
     ADD CONSTRAINT "user_email_check" CHECK (email ~ '^.+@.+$'),
-    ADD CONSTRAINT "user_login_check" CHECK (login ~ '^[a-zA-Z0-9_-]{5,32}$');
 
 -- CreateTable
 CREATE TABLE "wallets" (
