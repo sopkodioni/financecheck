@@ -36,18 +36,19 @@
 ## **2. Проєктування API (In progress)**
 ### Модуль users
 * **Endpoints:**
-  * POST `/users` - створення нового користувача
-  * PATCH `/users/me` - оновлення даних поточного користувача (ім'я, пошта, пароль)
+  * PATCH `/users/me` - оновлення імені поточного користувача
   * DELETE `/users/me` - видалення поточного користувача
   * GET `/users/me` - отримання даних поточного користувача
 * **DTOs:**
-  * create-user (`name`,`email`, `login`, `password`)
-  * update-user (`name?`,`email?`, `login?`, `password?`)
+  * create-user (`name`,`email`, `password`)
+  * update-user (`name?`)
 * **Service methods:**
   * create(dto)
-  * update(id, dto)
-  * delete(id)
-  * findById(id)
+  * updateProfile(userId: string, newName: string)
+  * updateEmail(userId: string, newEmail: string)
+  * updatePassword(userId: string, newPass: string)
+  * delete(userId)
+  * findById(userId)
 
 ## **3. Технічні вимоги**
 ### **Стек**: TS, ReactJS, NestJS, PostgreSQL, Prisma ORM
