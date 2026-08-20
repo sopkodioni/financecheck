@@ -15,7 +15,8 @@ CREATE TABLE "users" (
 
 ALTER TABLE "users"
     ADD CONSTRAINT "user_name_check" CHECK (name ~ '^[a-zA-Zа-яА-ЯёЁіІїЇєЄґҐ\s]{2,40}$'),
-    ADD CONSTRAINT "user_email_check" CHECK (email ~ '^.+@.+$'),
+    ADD CONSTRAINT "user_email_check" CHECK (email ~ '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
+    ADD CONSTRAINT "passHash_check" CHECK (length(passHash) BETWEEN 60 AND 255)
 
 -- CreateTable
 CREATE TABLE "wallets" (
