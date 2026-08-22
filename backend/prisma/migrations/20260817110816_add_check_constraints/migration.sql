@@ -15,8 +15,7 @@ CREATE TABLE "users" (
 
 ALTER TABLE "users"
     ADD CONSTRAINT "user_name_check" CHECK (name ~ '^[a-zA-Zа-яА-ЯёЁіІїЇєЄґҐ\s]{2,40}$'),
-    ADD CONSTRAINT "user_email_check" CHECK (email ~ '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
-    ADD CONSTRAINT "passHash_check" CHECK (length(passHash) BETWEEN 60 AND 255)
+    ADD CONSTRAINT "passHash_check" CHECK (length(passHash) BETWEEN 60 AND 255);
 
 -- CreateTable
 CREATE TABLE "wallets" (
@@ -92,9 +91,6 @@ ALTER TABLE "categories"
 
 -- CreateIndex
 CREATE UNIQUE INDEX "users_email_key" ON "users"("email");
-
--- CreateIndex
-CREATE UNIQUE INDEX "users_login_key" ON "users"("login");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "currencies_user_id_name_key" ON "currencies"("user_id", "name");
