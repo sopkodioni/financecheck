@@ -6,7 +6,7 @@ CREATE TABLE "users" (
     "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "email" TEXT NOT NULL,
-    "passHash" TEXT NOT NULL,
+    "pass_hash" TEXT NOT NULL,
     "created_at" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
@@ -15,7 +15,7 @@ CREATE TABLE "users" (
 
 ALTER TABLE "users"
     ADD CONSTRAINT "user_name_check" CHECK (name ~ '^[a-zA-Zа-яА-ЯёЁіІїЇєЄґҐ\s]{2,40}$'),
-    ADD CONSTRAINT "user_email_check" CHECK (email ~ '^.+@.+$');
+    ADD CONSTRAINT "pass_hash_check" CHECK (length("pass_hash") BETWEEN 60 AND 255);
 
 -- CreateTable
 CREATE TABLE "wallets" (
@@ -49,7 +49,7 @@ CREATE TABLE "currencies" (
 );
 
 ALTER TABLE "currencies"
-    ADD CONSTRAINT "currency_name_check" CHECK (name ~ '^[a-zA-Zа-яА-ЯёЁіІїЇєЄґҐ\s]{2,20}$'),
+    ADD CONSTRAINT "currency_name_check" CHECK (name ~ '^[a-zA-Zа-яА-ЯёЁіІїЇєЄґҐnpx prisma db execute --stdin\s]{2,20}$'),
     ADD CONSTRAINT "currency_code_check" CHECK (code ~ '^[A-Z_]{2,20}$'),
     ADD CONSTRAINT "currency_symbol_check" CHECK (char_length(symbol) BETWEEN 1 AND 10);
 

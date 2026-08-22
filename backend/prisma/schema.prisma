@@ -12,7 +12,7 @@ model User {
   id String @id @default(uuid())
   name String 
   email String @unique
-  passHash String 
+  passHash String @map("pass_hash")
   createdAt DateTime @default(now()) @db.Timestamptz() @map("created_at") 
   updatedAt DateTime @default(now()) @db.Timestamptz() @map("updated_at") 
 
