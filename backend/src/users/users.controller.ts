@@ -16,12 +16,6 @@ export class UsersController {
     @Patch('me')
     async updateUser(@Body() updateUserDto: UpdateUserDto) : Promise<User>{
         const mockId = "1"; // temp, need uuid
-        const user = await this.usersService.updateProfile(mockId, updateUserDto)
-        
-        if(!user){
-            throw new NotFoundException("User not found");
-        }
-
-        return user;
+        return this.usersService.updateProfile(mockId, updateUserDto)
     }
 }
