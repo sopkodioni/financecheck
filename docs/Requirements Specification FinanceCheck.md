@@ -37,11 +37,10 @@
 ### Модуль users
 * **Endpoints:**
   * PATCH `/users/me` - оновлення імені поточного користувача
-  * DELETE `/users/me` - видалення поточного користувача
   * GET `/users/me` - отримання даних поточного користувача
 * **DTOs:**
-  * create-user (`name`,`email`, `password`)
-  * update-user (`name?`)
+  * CreateUserDto (`name`,`email`, `password`)
+  * UpdateUserDto (`name?`)
 * **Service methods:**
   * create(dto)
   * updateProfile(userId: string, newName: string)
@@ -49,6 +48,26 @@
   * updatePassword(userId: string, newPass: string)
   * delete(userId)
   * findById(userId)
+
+### Модуль auth
+* **Endpoints:**
+  * POST `/auth/login` - вхід в систему, видача JWT-токену
+  * POST `/auth/send-code` - відправка коду підтвердження на почту
+  * POST `/auth/verify-code` - перевірка коду з пошти
+  * POST `/auth/register` -  створення користувача після верифікації
+  * POST `/auth/logout` - вихід з системи
+* **DTOs:**
+  * LoginDto (`email`, `password`)
+  * SendCodeDto (`email`)
+  * VerifyCodeDto (`email`, `code`)
+  * RegisterDto (`email`, `name`, `password)
+* **Guards**
+  * JwtAuthGuard
+* **Service methods:**
+  * sendVerificationCode(email)
+  * verifyCode(email, code)
+  * register(dto)
+  * login(dto)
 
 ## **3. Технічні вимоги**
 ### **Стек**: TS, ReactJS, NestJS, PostgreSQL, Prisma ORM
