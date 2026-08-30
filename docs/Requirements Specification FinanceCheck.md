@@ -60,7 +60,7 @@
   * LoginDto (`email`, `password`)
   * SendCodeDto (`email`)
   * VerifyCodeDto (`email`, `code`)
-  * RegisterDto (`email`, `name`, `password)
+  * RegisterDto (`email`, `name`, `password`)
 * **Guards**
   * JwtAuthGuard
 * **Service methods:**
