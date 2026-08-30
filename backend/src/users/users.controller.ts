@@ -18,7 +18,7 @@ export class UsersController {
 
     @Patch('me')
     @UseGuards(JwtAuthGuard)
-    async updateUser(@Req() req: any, @Body() updateUserDto: UpdateUserDto) : Promise<User>{
+    async updateUser(@Req() req: AuthenticatedRequest, @Body() updateUserDto: UpdateUserDto) : Promise<User>{
         const userId = req.user.userId;
         return this.usersService.updateProfile(userId, updateUserDto)
     }
