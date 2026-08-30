@@ -6,6 +6,7 @@ import { JwtService } from "@nestjs/jwt";
 import { JwtPayload } from "./interfaces/jwt-payload.interface";
 import { NewUser } from "./interfaces/new-user.interface";
 import bcrypt from 'bcryptjs';
+import { User } from "src/prisma/generated/client";
 
 @Injectable()
 export class AuthService{
@@ -14,8 +15,8 @@ export class AuthService{
         private jwtService: JwtService,
     ){}
 
-    async login(dto: LoginDto): Promise<{ accesToken: string }>{
-        const user = await this.usersService.findByEmail(dto.email);
+    async login(dto: LoginDto): Promise<{ accessToken: string }>{
+        const user: User | null = await this.usersService.findByEmail(dto.email);
 
         if(!user){
             throw new UnauthorizedException('Incorrect email or password');
@@ -27,12 +28,11 @@ export class AuthService{
             throw new UnauthorizedException('Incorrect email or password');
         }
 
-        const payload: JwtPayload = { sub: user.id, name: user.name }
-        return { accesToken: await this.jwtService.signAsync(payload) }
+        return this.generateToken(user);
     }
 
     
-    async regirster(dto: RegisterDto): Promise<{ accesToken: string }>{
+    async regirster(dto: RegisterDto): Promise<{ accessToken: string }>{
         const existsUser = await this.usersService.findByEmail(dto.email);
 
         if(!existsUser){
@@ -44,12 +44,16 @@ export class AuthService{
                 passHash
             }
 
-            const user = await this.usersService.create(newUser);
+            const user: User = await this.usersService.create(newUser);
 
-            const payload: JwtPayload = { sub: user.id, name: user.name }
-            return { accesToken: await this.jwtService.signAsync(payload) }
+            return this.generateToken(user);
         } else {
             throw new ConflictException('User with this email alrady exists');
         }
+    }
+
+    private async generateToken(user: User): Promise<{ accessToken: string }>{
+        const payload: JwtPayload = { sub: user.id, name: user.name }
+        return { accessToken: await this.jwtService.signAsync(payload) }
     }
 }
