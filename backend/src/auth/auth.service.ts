@@ -7,13 +7,40 @@ import { JwtPayload } from "./interfaces/jwt-payload.interface";
 import { NewUser } from "./interfaces/new-user.interface";
 import bcrypt from 'bcryptjs';
 import { User } from "src/prisma/generated/client";
+import { SendCodeDto } from "./dto/send-code.dto";
+import * as nodemailer from 'nodemailer';
+import { ConfigService } from "@nestjs/config";
+import { RedisSerivce } from "src/redis/redis.service";
+
+function getEmailTemaplteHtml(code: string): string{
+    return `
+        <div style="border: 1px solid black; padding: 10px; display: flex; align-items: center; justify-content: center;">
+            <h1 style="font-size: 50px; font-family: Arial; letter-spacing: 1.3px;">
+                ${ code }
+            </h1>
+        </div>
+    `
+}
 
 @Injectable()
 export class AuthService{
+    private readonly mailTransporter: nodemailer.Transporter;
+
     constructor(
         private usersService: UsersService,
         private jwtService: JwtService,
-    ){}
+        private configService: ConfigService,
+        private redisService: RedisSerivce
+    ){
+        this.mailTransporter = nodemailer.createTransport({
+            host: this.configService.getOrThrow<string>('MAILTRAP_HOST'),
+            port: this.configService.getOrThrow<number>('MAILTRAP_PORT'),
+            auth: {
+                user: this.configService.getOrThrow<string>('MAILTRAP_USER'),
+                pass: this.configService.getOrThrow<string>('MAILTRAP_PASS')
+            }
+        });
+    }
 
     async login(dto: LoginDto): Promise<{ accessToken: string }>{
         const user: User | null = await this.usersService.findByEmail(dto.email);
@@ -50,6 +77,19 @@ export class AuthService{
         } else {
             throw new ConflictException('User with this email alrady exists');
         }
+    }
+
+    async sendCode(dto: SendCodeDto){
+        const code = Math.floor(1000 + Math.random() * 9000).toString();
+
+        await this.mailTransporter.sendMail({
+            from: "Financecheck <hello@financecheck.com>",
+            to: dto.email,
+            subject: "Authentification code",
+            html: getEmailTemaplteHtml(code)
+        });
+
+        await this.redisService.set(`auth:code:${dto.email}`, code, "EX", 300);
     }
 
     private async generateToken(user: User): Promise<{ accessToken: string }>{
