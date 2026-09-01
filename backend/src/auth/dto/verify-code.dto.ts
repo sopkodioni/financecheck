@@ -8,5 +8,5 @@ export class VerifyCodeDto{
 
     @IsString()
     @Length(4, 4, { message: "Code must have 8 characters" })
-    code: string;
+    enteredCode: string;
 }
