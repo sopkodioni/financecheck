@@ -1,4 +1,4 @@
-import { ConflictException, Injectable, UnauthorizedException } from "@nestjs/common";
+import { BadRequestException, ConflictException, Injectable, UnauthorizedException } from "@nestjs/common";
 import { UsersService } from "src/users/users.service";
 import { RegisterDto } from "./dto/register.dto";
 import { LoginDto } from "./dto/login.dto";
@@ -11,6 +11,7 @@ import { SendCodeDto } from "./dto/send-code.dto";
 import * as nodemailer from 'nodemailer';
 import { ConfigService } from "@nestjs/config";
 import { RedisSerivce } from "src/redis/redis.service";
+import { VerifyCodeDto } from "./dto/verify-code.dto";
 
 function getEmailTemaplteHtml(code: string): string{
     return `
@@ -18,7 +19,7 @@ function getEmailTemaplteHtml(code: string): string{
             <h1 style="font-size: 50px; font-family: Arial; letter-spacing: 1.3px;">
                 ${ code }
             </h1>
-        </div>
+        </div> 
     `
 }
 
@@ -90,6 +91,23 @@ export class AuthService{
         });
 
         await this.redisService.set(`auth:code:${dto.email}`, code, "EX", 300);
+    }
+
+    async verifyCode(dto: VerifyCodeDto){
+        const code = await this.redisService.get(dto.email);
+
+        if(!code){
+            throw new BadRequestException("Verification code has expired or does not exist");
+        }
+
+        if(code !== dto.enteredCode){
+            throw new BadRequestException("Incorrect verification code");
+        }
+
+        return {
+            success: true,
+            message: 'Email verified successfully'
+        }
     }
 
     private async generateToken(user: User): Promise<{ accessToken: string }>{
