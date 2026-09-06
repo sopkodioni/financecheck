@@ -93,7 +93,7 @@ export class AuthService{
         await this.redisService.set(`auth:code:${dto.email}`, code, "EX", 300);
     }
 
-    async verifyCode(dto: VerifyCodeDto){
+    async verifyCode(dto: VerifyCodeDto): Promise<{ success: boolean, message: string }>{
         const code = await this.redisService.get(`auth:code:${dto.email}`);
 
         if(!code){

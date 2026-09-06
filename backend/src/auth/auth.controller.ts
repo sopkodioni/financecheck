@@ -4,6 +4,7 @@ import { RegisterDto } from "./dto/register.dto";
 import { AuthService } from "./auth.service";
 import { SendCodeDto } from "./dto/send-code.dto";
 import { Send } from "express";
+import { VerifyCodeDto } from "./dto/verify-code.dto";
 
 @Controller('auth')
 export class AuthController{
@@ -22,5 +23,10 @@ export class AuthController{
     @Post('send-code')
     async sendCode(@Body() sendCodeDto: SendCodeDto){
         this.authService.sendCode(sendCodeDto);
+    }
+
+    @Post('verify-code')
+    async verifyCode(@Body() verifyCodeDto: VerifyCodeDto){
+        this.authService.verifyCode(verifyCodeDto.enteredCode)
     }
 }
