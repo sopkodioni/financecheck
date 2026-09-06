@@ -26,7 +26,7 @@ export class AuthController{
     }
 
     @Post('verify-code')
-    async verifyCode(@Body() verifyCodeDto: VerifyCodeDto){
-        this.authService.verifyCode(verifyCodeDto.enteredCode)
+    async verifyCode(@Body() verifyCodeDto: VerifyCodeDto): Promise<{ success: boolean, message: string }>{
+        return this.authService.verifyCode(verifyCodeDto);
     }
 }
