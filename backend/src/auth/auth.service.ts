@@ -94,7 +94,7 @@ export class AuthService{
     }
 
     async verifyCode(dto: VerifyCodeDto){
-        const code = await this.redisService.get(dto.email);
+        const code = await this.redisService.get(`auth:code:${dto.email}`);
 
         if(!code){
             throw new BadRequestException("Verification code has expired or does not exist");
@@ -103,6 +103,8 @@ export class AuthService{
         if(code !== dto.enteredCode){
             throw new BadRequestException("Incorrect verification code");
         }
+
+        await this.redisService.del(`auth:code:${dto.email}`);
 
         return {
             success: true,
