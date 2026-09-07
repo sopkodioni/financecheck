@@ -12,6 +12,7 @@ import * as nodemailer from 'nodemailer';
 import { ConfigService } from "@nestjs/config";
 import { RedisSerivce } from "src/redis/redis.service";
 import { VerifyCodeDto } from "./dto/verify-code.dto";
+import { DecodedToken } from "./interfaces/decoded-token.interface";
 
 function getEmailTemaplteHtml(code: string): string{
     return `
@@ -60,20 +61,28 @@ export class AuthService{
     }
 
     
-    async regirster(dto: RegisterDto): Promise<{ accessToken: string }>{
-        const existsUser = await this.usersService.findByEmail(dto.email);
+    async register(dto: RegisterDto): Promise<{ accessToken: string }>{
+        let decodedEmailToken: DecodedToken
+
+        try{
+            decodedEmailToken = await this.jwtService.verifyAsync(dto.emailToken);
+        } catch(error) {
+            throw new BadRequestException('Invalid or expired email verification token')
+        }
+
+        const verifiedEmail = decodedEmailToken.email;
+        const existsUser = await this.usersService.findByEmail(verifiedEmail);
 
         if(!existsUser){
             const passHash = await bcrypt.hash(dto.password, 10);
 
             const newUser: NewUser = {
                 name: dto.name,
-                email: dto.email,
+                email: verifiedEmail,
                 passHash
             }
 
             const user: User = await this.usersService.create(newUser);
-
             return this.generateToken(user);
         } else {
             throw new ConflictException('User with this email alrady exists');
@@ -91,9 +100,14 @@ export class AuthService{
         });
 
         await this.redisService.set(`auth:code:${dto.email}`, code, "EX", 300);
+
+        return {
+            success: true,
+            message: "Code successfully delivered"
+        }
     }
 
-    async verifyCode(dto: VerifyCodeDto): Promise<{ success: boolean, message: string }>{
+    async verifyCode(dto: VerifyCodeDto): Promise<{ emailToken: string, message: string }>{
         const code = await this.redisService.get(`auth:code:${dto.email}`);
 
         if(!code){
@@ -106,8 +120,15 @@ export class AuthService{
 
         await this.redisService.del(`auth:code:${dto.email}`);
 
+        const emailPayload = {
+            email: dto.email,
+            isEmailVerified: true
+        }
+
+        const emailToken = await this.jwtService.signAsync(emailPayload, { expiresIn: '10m' });
+
         return {
-            success: true,
+            emailToken,
             message: 'Email verified successfully'
         }
     }
