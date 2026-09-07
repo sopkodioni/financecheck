@@ -1,21 +1,25 @@
-import { Body, Controller, Get, NotFoundException, Patch} from '@nestjs/common';
+import { Body, Controller, Get, Patch, Req, UseGuards} from '@nestjs/common';
 import { UsersService } from './users.service';
 import { User } from 'src/prisma/generated/client';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import type { AuthenticatedRequest } from 'src/auth/interfaces/authenticated-request.interface';
 
 @Controller('users')
 export class UsersController {
     constructor(private usersService: UsersService) {}
 
     @Get('me')
-    async getUser(): Promise<User | null> {
-        const mockId = "1"; // temp, need uuid
-        return this.usersService.findById(mockId);
+    @UseGuards(JwtAuthGuard)
+    async getUser(@Req() req: AuthenticatedRequest): Promise<User | null> {
+        const userId = req.user.userId;
+        return this.usersService.findById(userId);
     }
 
     @Patch('me')
-    async updateUser(@Body() updateUserDto: UpdateUserDto) : Promise<User>{
-        const mockId = "1"; // temp, need uuid
-        return this.usersService.updateProfile(mockId, updateUserDto)
+    @UseGuards(JwtAuthGuard)
+    async updateUser(@Req() req: AuthenticatedRequest, @Body() updateUserDto: UpdateUserDto) : Promise<User>{
+        const userId = req.user.userId;
+        return this.usersService.updateProfile(userId, updateUserDto)
     }
 }
