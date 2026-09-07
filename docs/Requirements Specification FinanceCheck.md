@@ -64,10 +64,10 @@
 * **Guards**
   * JwtAuthGuard
 * **Service methods:**
-  * sendVerificationCode(email)
-  * verifyCode(email, code)
-  * register(dto)
   * login(dto)
+  * register(dto)
+  * sendCode(email)
+  * verifyCode(email, code)
 
 ## **3. Технічні вимоги**
 ### **Стек**: TS, ReactJS, NestJS, PostgreSQL, Prisma ORM
