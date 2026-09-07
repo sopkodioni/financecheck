@@ -40,7 +40,7 @@ Finance Check – це веб-додаток для відстеження фі�
 * **Guards**
   * JwtAuthGuard
 * **Service methods:**
-  * sendVerificationCode(email)
+  * sendCode(email)
   * verifyCode(email, code)
   * register(dto)
   * login(dto)
