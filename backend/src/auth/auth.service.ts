@@ -13,6 +13,10 @@ import { ConfigService } from "@nestjs/config";
 import { RedisSerivce } from "src/redis/redis.service";
 import { VerifyCodeDto } from "./dto/verify-code.dto";
 import { DecodedToken } from "./interfaces/decoded-token.interface";
+import { VerifyCode } from "./interfaces/verify-code.interface";
+import { SendCode } from "./interfaces/send-code.interface";
+import { AuthResponse } from "./interfaces/auth-response.interface";
+import { JwtEmailPayload } from "./interfaces/email-payload.interface";
 
 function getEmailTemaplteHtml(code: string): string{
     return `
@@ -44,7 +48,7 @@ export class AuthService{
         });
     }
 
-    async login(dto: LoginDto): Promise<{ accessToken: string }>{
+    async login(dto: LoginDto): Promise<AuthResponse>{
         const user: User | null = await this.usersService.findByEmail(dto.email);
 
         if(!user){
@@ -61,7 +65,7 @@ export class AuthService{
     }
 
     
-    async register(dto: RegisterDto): Promise<{ accessToken: string }>{
+    async register(dto: RegisterDto): Promise<AuthResponse>{
         let decodedEmailToken: DecodedToken
 
         try{
@@ -89,7 +93,7 @@ export class AuthService{
         }
     }
 
-    async sendCode(dto: SendCodeDto){
+    async sendCode(dto: SendCodeDto): Promise<SendCode>{
         const code = Math.floor(1000 + Math.random() * 9000).toString();
 
         await this.mailTransporter.sendMail({
@@ -107,7 +111,7 @@ export class AuthService{
         }
     }
 
-    async verifyCode(dto: VerifyCodeDto): Promise<{ emailToken: string, message: string }>{
+    async verifyCode(dto: VerifyCodeDto): Promise<VerifyCode>{
         const code = await this.redisService.get(`auth:code:${dto.email}`);
 
         if(!code){
@@ -120,7 +124,7 @@ export class AuthService{
 
         await this.redisService.del(`auth:code:${dto.email}`);
 
-        const emailPayload = {
+        const emailPayload: JwtEmailPayload = {
             email: dto.email,
             isEmailVerified: true
         }
@@ -133,7 +137,7 @@ export class AuthService{
         }
     }
 
-    private async generateToken(user: User): Promise<{ accessToken: string }>{
+    private async generateToken(user: User): Promise<AuthResponse>{
         const payload: JwtPayload = { sub: user.id, name: user.name }
         return { accessToken: await this.jwtService.signAsync(payload) }
     }
