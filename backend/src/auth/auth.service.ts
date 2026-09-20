@@ -75,39 +75,40 @@ export class AuthService{
         }
 
         const verifiedEmail = decodedEmailToken.email;
-        const existsUser = await this.usersService.findByEmail(verifiedEmail);
 
-        if(!existsUser){
-            const passHash = await bcrypt.hash(dto.password, 10);
+        const passHash = await bcrypt.hash(dto.password, 10);
 
-            const newUser: NewUser = {
-                name: dto.name,
-                email: verifiedEmail,
-                passHash
-            }
-
-            const user: User = await this.usersService.create(newUser);
-            return this.generateToken(user);
-        } else {
-            throw new ConflictException('User with this email alrady exists');
+        const newUser: NewUser = {
+            name: dto.name,
+            email: verifiedEmail,
+            passHash
         }
+
+        const user: User = await this.usersService.create(newUser);
+        return this.generateToken(user);
     }
 
     async sendCode(dto: SendCodeDto): Promise<SendCode>{
-        const code = Math.floor(1000 + Math.random() * 9000).toString();
+        const existsUser = await this.usersService.findByEmail(dto.email);
 
-        await this.mailTransporter.sendMail({
-            from: "Financecheck <hello@financecheck.com>",
-            to: dto.email,
-            subject: "Authentification code",
-            html: getEmailTemaplteHtml(code)
-        });
+        if(!existsUser) {
+            const code = Math.floor(1000 + Math.random() * 9000).toString();
 
-        await this.redisService.set(`auth:code:${dto.email}`, code, "EX", 300);
+            await this.mailTransporter.sendMail({
+                from: "Financecheck <hello@financecheck.com>",
+                to: dto.email,
+                subject: "Authentification code",
+                html: getEmailTemaplteHtml(code)
+            });
 
-        return {
-            success: true,
-            message: "Code successfully delivered"
+            await this.redisService.set(`auth:code:${dto.email}`, code, "EX", 300);
+
+            return {
+                success: true,
+                message: "Code successfully delivered"
+            }
+        } else {
+            throw new ConflictException('User with this email alrady exists');
         }
     }
 
