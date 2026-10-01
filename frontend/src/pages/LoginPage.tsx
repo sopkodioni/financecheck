@@ -1,8 +1,11 @@
+import AuthLayout from "../components/layout/AuthLayout"
+import LoginForm from "../features/auth/components/login/LoginForm"
+
 const LoginPage = () => {
     return (
-        <>  
-            <h1>Login Page</h1>
-        </>
+        <AuthLayout title="Login">
+            <LoginForm />
+        </AuthLayout>
     )
 }
 

@@ -1,8 +1,11 @@
+import RegisterForm from "../features/auth/components/register/RegisterForm"
+import AuthLayout from "../components/layout/AuthLayout"
+
 const RegisterPage = () => {
     return (
-        <>  
-            <h1>Register Page</h1>
-        </>
+        <AuthLayout>
+            <RegisterForm />
+        </AuthLayout>
     )
 }
 
