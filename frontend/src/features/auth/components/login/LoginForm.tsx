@@ -12,8 +12,10 @@ const LoginForm = () => {
 
     const {
         register,
+        setError,
         handleSubmit,
-    } = useForm({
+        formState: { errors }
+    } = useForm<LoginFormData>({
         resolver: zodResolver(loginSchema),
         defaultValues: {
             email: '',
@@ -28,7 +30,8 @@ const LoginForm = () => {
             const res = await authApi.login(data)
             localStorage.setItem('accessToken', res.accessToken)
         } catch(error){
-            alert(error.response?.data?.message)
+            const message = error.response?.data?.message || 'Incorrect email or password'
+            setError('root', { message })
         } finally {
             setIsLoad(false)
         }
@@ -40,6 +43,8 @@ const LoginForm = () => {
             
             <Input {...register('email')} type="email" placeholder="Email"/>
             <Input {...register('password')} type="password" placeholder="Password"/>
+            { errors.root && <span className="text-red-600 block text-center">{ errors.root.message }</span> }
+
             <Button 
                 type="submit" 
                 onClick={handleSubmit(onSubmit)} 
@@ -48,7 +53,7 @@ const LoginForm = () => {
                 className="mb-3"
             />
 
-            <div className="bg-white mb-3"></div>
+            <div className="bg-gray-700 h-\[1px]\ mb-3"></div>
 
             <Link to="/register">
                 <Button title="Sign Up" className="bg-transparent! text-white!"/>
