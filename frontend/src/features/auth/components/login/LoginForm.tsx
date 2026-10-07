@@ -5,10 +5,14 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { loginSchema, type LoginFormData } from "../../schemas/login.schema"
 import { useState } from "react"
 import { authApi } from "../../api/authApi"
-import { Link } from "react-router"
+import { Link, useNavigate } from "react-router"
+import { useDispatch } from "react-redux"
+import { setCredentials } from "../../authSlice"
 
 const LoginForm = () => {
     const [isLoad, setIsLoad] = useState<boolean>(false)
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
 
     const {
         register,
@@ -27,8 +31,10 @@ const LoginForm = () => {
     const onSubmit = async (data: LoginFormData) => {
         try{
             setIsLoad(true)
-            const res = await authApi.login(data)
-            localStorage.setItem('accessToken', res.accessToken)
+            const { accessToken } = await authApi.login(data)
+            const user = await authApi.getMe(accessToken)
+            dispatch(setCredentials({ user, accessToken }))
+            navigate('/dashboard')
         } catch(error){
             const message = error.response?.data?.message || 'Incorrect email or password'
             setError('root', { message })
@@ -53,7 +59,7 @@ const LoginForm = () => {
                 className="mb-3"
             />
 
-            <div className="bg-gray-700 h-\[1px]\ mb-3"></div>
+            <div className="bg-gray-700 h-px mb-3"></div>
 
             <Link to="/register">
                 <Button title="Sign Up" className="bg-transparent! text-white!"/>

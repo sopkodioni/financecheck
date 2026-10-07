@@ -7,10 +7,15 @@ import VerifyCodeStep from "./VerifyCodeStep"
 import CredentialsStep from "./CredentialsStep"
 import type { RegisterStep } from "../../types"
 import { authApi } from "../../api/authApi"
+import { useDispatch } from "react-redux"
+import { setCredentials } from "../../authSlice"
+import { useNavigate } from "react-router"
 
 const RegisterForm = () => {
     const [step, setStep] = useState<RegisterStep>('EMAIL')
     const [isLoad, setIsLoad] = useState<boolean>(false)
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
     
     const {
         register,
@@ -74,11 +79,11 @@ const RegisterForm = () => {
         
         try{
             setIsLoad(true)
-            const data = await authApi.register({ name, password, emailToken })
-            const accessToken = data.accessToken
-            
+            const { accessToken } = await authApi.register({ name, password, emailToken })
             localStorage.removeItem('emailToken')
-            localStorage.setItem('accesToken', accessToken)
+            const user = await authApi.getMe(accessToken)
+            dispatch(setCredentials({ user, accessToken }))
+            navigate('/dashboard')
         } catch(error){
             const serverErrorMessage = error.response?.data?.message
             alert(serverErrorMessage)

@@ -4,6 +4,7 @@ import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import NotFoundPage from "./pages/NotFoundPage";
 import DashboardPage from "./pages/DashboardPage";
+import ProtectedRoute from "./providers/ProtectedRoute";
 
 export const router = createBrowserRouter([
     {
@@ -20,7 +21,13 @@ export const router = createBrowserRouter([
     },
     {
         path: '/dashboard',
-        element: <DashboardPage />
+        element: <ProtectedRoute />,
+        children: [
+            {
+                index: true,
+                element: <DashboardPage />
+            }
+        ]
     },
     {
         path: '*',

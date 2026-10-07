@@ -1,4 +1,5 @@
 import { apiClient } from "../../../api/apiClient"
+import type { User } from "../authSlice";
 import type { LoginDto, RegisterDto, SendCodeDto, VerifyCodeDto } from "../types";
 
 export const authApi = {
@@ -31,6 +32,15 @@ export const authApi = {
             '/auth/login', dto
         )
 
+        return data
+    },
+
+    getMe: async (accessToken: string) => {
+        const { data } = await apiClient.get<User>('users/me', {
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            }
+        })
         return data
     }
 }
