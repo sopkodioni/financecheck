@@ -92,6 +92,15 @@ const RegisterForm = () => {
         }
     }
 
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLElement>, callback: () => void) => {
+        if(e.key === 'Enter'){
+            e.preventDefault()
+            e.stopPropagation()
+            
+            callback()
+        }
+    }
+
     return (
         <form onSubmit={ handleSubmit(onSubmit) } className="relative">
             <h1 className="text-2xl font-bold text-white text-center tracking-widest uppercase">Sign Up</h1>
@@ -103,6 +112,7 @@ const RegisterForm = () => {
                     isLoad={isLoad} 
                     sendCode={ sendCode }
                     errors={ errors } 
+                    handleKeyDown={ handleKeyDown }
                 />
             )}
 
@@ -113,6 +123,7 @@ const RegisterForm = () => {
                     isLoad={isLoad}
                     setStep={ setStep }
                     errors={ errors }
+                    handleKeyDown={ handleKeyDown }
                 />
             )}
 

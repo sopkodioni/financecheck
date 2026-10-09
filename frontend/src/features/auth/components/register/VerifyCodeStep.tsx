@@ -10,11 +10,12 @@ interface VerifyCodeStepProps {
     errors: FieldErrors<RegisterFormData>
     verifyCode: () => Promise<void>
     setStep: (step: RegisterStep) => void
+    handleKeyDown: (e: React.KeyboardEvent<HTMLElement>, callback: () => void) => void
 }
 
 const subtitleStyles = "text-sm font-light text-white mb-6 text-center" 
 
-const VerifyCodeStep = ({ isLoad, control, errors, verifyCode, setStep }: VerifyCodeStepProps) => {
+const VerifyCodeStep = ({ isLoad, control, errors, verifyCode, setStep, handleKeyDown }: VerifyCodeStepProps) => {
     const codeValue = useWatch({
         control,
         name: 'code'
@@ -23,7 +24,7 @@ const VerifyCodeStep = ({ isLoad, control, errors, verifyCode, setStep }: Verify
     const isCodeIncomplete = !codeValue || codeValue.some(digit => digit.trim() === '')
 
     return (
-        <div>
+        <div onKeyDown={(e) => handleKeyDown(e, verifyCode)}>
             <h3 className={subtitleStyles}>We have sent the code to your email</h3>
 
             <Controller 

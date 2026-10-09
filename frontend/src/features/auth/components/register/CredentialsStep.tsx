@@ -2,7 +2,6 @@ import type { FieldErrors, UseFormRegister } from "react-hook-form"
 import Button from "../../../../components/ui/Button"
 import Input from "../../../../components/ui/Input"
 import type { RegisterFormData } from "../../schemas/register.schema"
-import { Link } from "react-router"
 
 interface CredentialsStepProps {
     isLoad: boolean,

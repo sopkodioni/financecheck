@@ -10,11 +10,12 @@ interface EmailStepProps {
     register: UseFormRegister<RegisterFormData>
     errors: FieldErrors<RegisterFormData>
     sendCode: () => Promise<void>
+    handleKeyDown: (e: React.KeyboardEvent<HTMLElement>, callback: () => void) => void
 }
 
 const subtitleStyles = "text-sm font-light text-white mb-6 text-center" 
 
-const EmailStep = ({ isLoad, control, register, sendCode, errors }: EmailStepProps) => {
+const EmailStep = ({ isLoad, control, register, sendCode, errors, handleKeyDown }: EmailStepProps) => {
     const emailValue = useWatch({
         control,
         name: 'email'
@@ -23,7 +24,7 @@ const EmailStep = ({ isLoad, control, register, sendCode, errors }: EmailStepPro
     const emailIsCorrect = emailValue.length <= 10
 
     return (
-        <div>
+        <div onKeyDown={(e) => handleKeyDown(e, sendCode)}>
             <h3 className={subtitleStyles}>To register, you need to verify your email</h3>
             
             <Input 
