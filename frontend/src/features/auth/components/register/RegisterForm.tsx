@@ -134,8 +134,6 @@ const RegisterForm = () => {
                     errors={ errors }
                 />
             )}
-
-            {/* {isLoad && <Loader />} */}
         </form>
     )
 }
