@@ -2,6 +2,7 @@ import type { FieldErrors, UseFormRegister } from "react-hook-form"
 import Button from "../../../../components/ui/Button"
 import Input from "../../../../components/ui/Input"
 import type { RegisterFormData } from "../../schemas/register.schema"
+import { Link } from "react-router"
 
 interface CredentialsStepProps {
     isLoad: boolean,
@@ -42,6 +43,8 @@ const CredentialsStep = ({isLoad, register, errors}: CredentialsStepProps) => {
                 title = "Sign Up" 
                 isLoad={isLoad}
             />
+
+            <div className="bg-gray-700 h-px mb-3"></div>
         </div>
     )
 }
