@@ -92,14 +92,15 @@ export class AuthService{
         const existsUser = await this.usersService.findByEmail(dto.email);
 
         if(!existsUser) {
-            const code = Math.floor(1000 + Math.random() * 9000).toString();
+            // const code = Math.floor(1000 + Math.random() * 9000).toString();
+            const code = 1111; // temp
 
-            await this.mailTransporter.sendMail({
-                from: "Financecheck <hello@financecheck.com>",
-                to: dto.email,
-                subject: "Authentification code",
-                html: getEmailTemaplteHtml(code)
-            });
+            // await this.mailTransporter.sendMail({
+            //     from: "Financecheck <hello@financecheck.com>",
+            //     to: dto.email,
+            //     subject: "Authentification code",
+            //     html: getEmailTemaplteHtml(code)
+            // });
 
             await this.redisService.set(`auth:code:${dto.email}`, code, "EX", 300);
 
