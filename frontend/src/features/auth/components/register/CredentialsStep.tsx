@@ -25,6 +25,7 @@ const CredentialsStep = ({isLoad, register, errors}: CredentialsStepProps) => {
                 placeholder = "Password"
                 type="password"
                 error={errors.password?.message} 
+                autoComplete="new-password"
             />
             <Input 
                 {...register('confirmPassword')}
