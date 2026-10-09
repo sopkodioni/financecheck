@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Prisma, User } from 'src/prisma/generated/client';
 import { PrismaService } from 'src/PrismaModule/prisma.service';
+import { UserWithoutPassHash } from './types/user.type';
 
 @Injectable()
 export class UsersService {
@@ -31,9 +32,15 @@ export class UsersService {
         });
     }
 
-    async findById(id: string): Promise<User | null> {
+    async findById(id: string): Promise<UserWithoutPassHash | null> {
         return this.prisma.user.findUnique({
-            where: { id }
+            where: { id },
+            select: {
+                id: true,
+                name: true,
+                email: true,
+                createdAt: true,
+            }
         });
     }
 
